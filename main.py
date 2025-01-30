@@ -151,6 +151,7 @@ with tab3:
 
     # 平文入力
     raw_text = st.text_input("暗号化したい文字列を入力（入力後、Enterを押してください）")
+    st.caption("※ 「全角ひらがな」や「全角英数字・記号」で入力してください")
 
     if str(raw_text) == "":
         st.error("【エラー】暗号化したい文字列を入力してください。")
