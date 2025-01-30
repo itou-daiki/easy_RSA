@@ -97,8 +97,6 @@ with tab2:
             st.write(f"-1 を e ( {e} ) で割った余りは {(-1 % e)} です。")
             st.write(f"→ {z}  × m を e ( {e} ) で割った余りが {(-1 % e)} になるような m を探してください。")
 
-            #sm = range(1, e, 1)
-
             m = st.number_input("m を選択してください（1 ≦ m ≦ " + str(e - 1) + "）", min_value=1,max_value=e-1, value=1, step=1)
 
             if (-1 % e) != ((z * m) % e):
