@@ -126,7 +126,7 @@ with tab3:
     st.caption("Created by Dit-Lab.(Daiki Ito)")
     st.write("")
     st.subheader("ブラウザでRSA暗号の「鍵生成」→「暗号化」→「復号」まで体験することができます")
-    st.write("暗号化には便宜上ポケベル暗号を使っています")
+    st.write("暗号化には便宜上ポケベル暗号を使っています（本来は文字コード）")
 
     image_encrypt = Image.open('ポケベル暗号.png')
     st.image(image_encrypt)
