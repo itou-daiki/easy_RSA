@@ -3,9 +3,6 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 
-#-----------------------------------------------------------------------
-# Streamlitアプリのページ設定（アプリ全体で一度きり）
-#-----------------------------------------------------------------------
 st.set_page_config(
     page_title="RSA暗号体験",
     layout="wide"
