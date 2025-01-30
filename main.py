@@ -201,8 +201,8 @@ with tab4:
     pocketbell_dict_dec = dict(zip(pocketbell_df2['数字'], pocketbell_df2['文字']))
 
     # 秘密鍵・公開鍵の一部(n)などの入力
-    n_val = st.number_input("公開鍵( n )を入力してください", min_value=1, value=1, step=1)
-    d_val = st.number_input("秘密鍵( d )を入力してください", min_value=1, value=1, step=1)
+    n_val = st.number_input("公開鍵( n )を入力してください", min_value=1, value=n, step=1)
+    d_val = st.number_input("秘密鍵( d )を入力してください", min_value=1, value=d, step=1)
 
     # 暗号化された数値の入力
     encrypted_text_input = st.text_area("暗号化された数値をスペース区切りで入力してください")
