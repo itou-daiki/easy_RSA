@@ -136,12 +136,12 @@ with tab3:
     #（Excelファイル名に注意: "ポケベル暗号リスト.xlsx"）
     #---------------------------------------------------
     pocketbell_df = pd.read_excel("ポケベル暗号リスト.xlsx")
+    # 例: pocketbell_df['文字']: "あ", "い", ...
+    #     pocketbell_df['数字']: 11,   12,   ...
     pocketbell_dict = dict(zip(pocketbell_df['文字'], pocketbell_df['数字']))
 
     #---------------------------------------------
-    # 濁点・半濁点を分解するためのマップを準備
-    # 例）「が」→「か」「゛」
-    #     「ぱ」→「は」「°」
+    # 濁点・半濁点を分解するためのマップ
     #---------------------------------------------
     dakuten_handakuten_map = {
         'が': ('か','゛'), 'ぎ': ('き','゛'), 'ぐ': ('く','゛'), 'げ': ('け','゛'), 'ご': ('こ','゛'),
@@ -157,48 +157,44 @@ with tab3:
     if str(raw_text) == "":
         st.error("【エラー】暗号化したい文字列を入力してください。")
     else:
-        # 平文をポケベル暗号に変換
-        pocket_bell_text = []
-        converted_pairs = []  # 後でデータフレーム表示用: 元の文字 -> 数値(複数可) を可視化する
-
+        # ---- 文字 → ポケベル数値 への変換 ----
+        #  1. 濁点・半濁点付きかどうかを判定
+        #  2. 分解後、それぞれポケベル暗号の数値を取得
+        #  3. 1ペア(文字,数値)の配列を作り、行ごとに表を作る
+        expanded_list = []
         unknown_chars = False
+
         for ch in raw_text:
             if ch in pocketbell_dict:
-                # 変換可能な文字の場合
-                pocket_bell_text.append(pocketbell_dict[ch])
-                converted_pairs.append((ch, [pocketbell_dict[ch]]))
+                # 1文字そのまま変換
+                expanded_list.append((ch, pocketbell_dict[ch]))
             elif ch in dakuten_handakuten_map:
-                # 例：「が」→「か」「゛」
+                # 濁点/半濁点付き文字を分解
                 base_char, mark = dakuten_handakuten_map[ch]
                 if base_char in pocketbell_dict and mark in pocketbell_dict:
-                    pocket_bell_text.append(pocketbell_dict[base_char])
-                    pocket_bell_text.append(pocketbell_dict[mark])
-                    converted_pairs.append((ch, [pocketbell_dict[base_char], pocketbell_dict[mark]]))
+                    expanded_list.append((base_char, pocketbell_dict[base_char]))
+                    expanded_list.append((mark, pocketbell_dict[mark]))
                 else:
                     unknown_chars = True
                     break
             else:
-                # リスト外の文字の場合
                 unknown_chars = True
                 break
 
         if unknown_chars:
             st.warning("【エラー】リストにない文字、または分解できない文字が含まれています。")
         else:
-            # 平文と数値のマッピング表示（複数数値に対応）
-            # 1文字が2要素に分解されるケースがあるため、行を1文字にしてカラム側を可変に
-            # → ここでは見やすさ優先で、一旦文字とまとめた数値を1行表示にします
-            df_list = []
-            for orig, nums in converted_pairs:
-                df_list.append({
-                    '元の文字': orig,
-                    '変換後数値': ' '.join(str(n) for n in nums)
-                })
-            df = pd.DataFrame(df_list)
-            st.write(df)
+            # expanded_list 例: [('か','21'), ('゛','04'), ('い','12'), ('こ','25'), ...]
+            # -> DataFrame化
+            encrypt_df = pd.DataFrame(expanded_list, columns=['文字','数値'])
+            st.write("入力文字の分解・数値化結果:")
+            st.write(encrypt_df)
 
-            st.write("上記の平文を数値列にすると:")
-            st.write("「" + ' '.join(map(str, pocket_bell_text)) + "」 になります。")
+            # 全数値をまとめて、RSA公開鍵で暗号化
+            # 数値はintにしてリスト化
+            pocketbell_nums = [int(num) for _, num in expanded_list]
+            st.write("上記の数値リスト:",
+                     ' '.join(str(n) for n in pocketbell_nums))
 
             # 公開鍵の入力
             st.write("受け取った「公開鍵（ n、e ）」を入力してください。")
@@ -206,13 +202,11 @@ with tab3:
             e_val = st.number_input("公開鍵( e )を入力してください。", min_value=1, value=1, step=1)
 
             if st.button("暗号化実行"):
-                # RSA暗号化
-                encrypted_text = [pow(num, e_val, n_val) for num in pocket_bell_text]
-
-                # 結果をデータフレームで表示
-                encrypted_df = pd.DataFrame({'暗号化された数値': encrypted_text}).T
-                encrypted_df.columns = ['文字' + str(i+1) for i in range(len(encrypted_text))]
-                st.write(encrypted_df)
+                encrypted_text = [pow(num, e_val, n_val) for num in pocketbell_nums]
+                # 結果をDataFrame表示
+                df_enc = pd.DataFrame({'暗号化された数値': encrypted_text}).T
+                df_enc.columns = ['文字' + str(i+1) for i in range(len(encrypted_text))]
+                st.write(df_enc)
 
     st.write('ご意見・ご要望は→', 'https://forms.gle/G5sMYm7dNpz2FQtU9', 'まで')
     st.markdown('© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.')
@@ -236,7 +230,6 @@ with tab4:
     pocketbell_dict_dec = dict(zip(pocketbell_df2['数字'], pocketbell_df2['文字']))
 
     # 秘密鍵・公開鍵の一部(n)などの入力
-    # ※ 鍵生成ページで算出した値を手動入力する想定
     n_val = st.number_input("公開鍵( n )を入力してください", min_value=1, value=1, step=1)
     d_val = st.number_input("秘密鍵( d )を入力してください", min_value=1, value=1, step=1)
 
@@ -249,7 +242,7 @@ with tab4:
         # RSA復号
         decrypted_nums = [pow(num, d_val, n_val) for num in encrypted_text_nums]
 
-        # 復号された数値をポケベル暗号 -> 文字に変換
+        # 復号された数値をポケベル暗号 -> 文字 に変換
         decrypted_chars = [pocketbell_dict_dec.get(num, '?') for num in decrypted_nums]
 
         # 結果をデータフレームで表示
