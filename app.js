@@ -177,14 +177,6 @@ function updateMSelection() {
     html += `<h3>p = ${p}, q = ${q}, d = ${d}</h3>`;
     html += '</div>';
 
-    // 鍵のエクスポートボタン
-    html += '<div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">';
-    html += `<button class="btn-modern btn-primary" onclick='exportPublicKey(${n}, ${e})'>`;
-    html += '<i class="fas fa-download"></i> 公開鍵をエクスポート</button>';
-    html += `<button class="btn-modern btn-secondary" onclick='exportPrivateKey(${n}, ${d})'>`;
-    html += '<i class="fas fa-download"></i> 秘密鍵をエクスポート</button>';
-    html += '</div>';
-
     html += '</div></div>';
 
     mResultDiv.innerHTML = html;
@@ -462,98 +454,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-// 鍵のエクスポート/インポート機能
-function exportPublicKey(n, e) {
-    const keyData = {
-        type: 'public',
-        n: n,
-        e: e,
-        timestamp: new Date().toISOString()
-    };
-    downloadJSON(keyData, `public_key_${Date.now()}.json`);
-    showToast('公開鍵をエクスポートしました', 'success');
-}
-
-function exportPrivateKey(n, d) {
-    const keyData = {
-        type: 'private',
-        n: n,
-        d: d,
-        timestamp: new Date().toISOString()
-    };
-    downloadJSON(keyData, `private_key_${Date.now()}.json`);
-    showToast('秘密鍵をエクスポートしました', 'success');
-}
-
-function downloadJSON(data, filename) {
-    const json = JSON.stringify(data, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function importPublicKeyForEncrypt() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const keyData = JSON.parse(event.target.result);
-                    if (keyData.type === 'public') {
-                        document.getElementById('encrypt-n').value = keyData.n;
-                        document.getElementById('encrypt-e').value = keyData.e;
-                        showToast('公開鍵をインポートしました', 'success');
-                    } else {
-                        showToast('公開鍵ファイルを選択してください', 'error');
-                    }
-                } catch (err) {
-                    showToast('ファイルの読み込みに失敗しました', 'error');
-                }
-            };
-            reader.readAsText(file);
-        }
-    };
-    input.click();
-}
-
-function importPrivateKeyForDecrypt() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const keyData = JSON.parse(event.target.result);
-                    if (keyData.type === 'private') {
-                        document.getElementById('decrypt-n').value = keyData.n;
-                        document.getElementById('decrypt-d').value = keyData.d;
-                        showToast('秘密鍵をインポートしました', 'success');
-                    } else {
-                        showToast('秘密鍵ファイルを選択してください', 'error');
-                    }
-                } catch (err) {
-                    showToast('ファイルの読み込みに失敗しました', 'error');
-                }
-            };
-            reader.readAsText(file);
-        }
-    };
-    input.click();
-}
 
 // サンプルデータ読み込み
 function loadSampleKey() {
