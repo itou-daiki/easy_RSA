@@ -67,11 +67,11 @@ function updateKeyGen() {
     const n = p * q;
     const z = (p - 1) * (q - 1);
 
-    let html = '<div class="content-card">';
+    let html = '<div class="content-card fade-in">';
     html += '<div class="alert alert-success"><i class="fas fa-check-circle"></i> <div>条件を満たしています。次のステップに進みます。</div></div>';
     html += '<div class="step-explanation">';
-    html += `<div class="calc-step"><i class="fas fa-calculator"></i> <strong>ステップ 3:</strong> n = p × q = ${p} × ${q} = <span class="highlight">${n}</span></div>`;
-    html += `<div class="calc-step"><i class="fas fa-calculator"></i> <strong>ステップ 4:</strong> z = (p-1) × (q-1) = ${p-1} × ${q-1} = <span class="highlight">${z}</span></div>`;
+    html += `<div class="calc-step slide-in-left"><i class="fas fa-calculator"></i> <strong>ステップ 3:</strong> n = p × q = ${p} × ${q} = <span class="highlight">${n}</span></div>`;
+    html += `<div class="calc-step slide-in-left" style="animation-delay: 0.1s;"><i class="fas fa-calculator"></i> <strong>ステップ 4:</strong> z = (p-1) × (q-1) = ${p-1} × ${q-1} = <span class="highlight">${z}</span></div>`;
     html += '</div>';
 
     // e の選択肢を表示
@@ -175,6 +175,14 @@ function updateMSelection() {
     html += '<div><h6 style="margin: 0; color: var(--text-secondary);">秘密鍵（絶対に秘密にする値）</h6></div>';
     html += '</div>';
     html += `<h3>p = ${p}, q = ${q}, d = ${d}</h3>`;
+    html += '</div>';
+
+    // 鍵のエクスポートボタン
+    html += '<div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">';
+    html += `<button class="btn-modern btn-primary" onclick='exportPublicKey(${n}, ${e})'>`;
+    html += '<i class="fas fa-download"></i> 公開鍵をエクスポート</button>';
+    html += `<button class="btn-modern btn-secondary" onclick='exportPrivateKey(${n}, ${d})'>`;
+    html += '<i class="fas fa-download"></i> 秘密鍵をエクスポート</button>';
     html += '</div>';
 
     html += '</div></div>';
@@ -281,7 +289,7 @@ function encrypt() {
     });
 
     // 結果を表示
-    let html = '<div class="result-card">';
+    let html = '<div class="result-card scale-in">';
     html += '<div class="result-header">';
     html += '<div class="result-title"><i class="fas fa-lock"></i> 暗号化結果</div>';
     html += '</div>';
@@ -335,7 +343,7 @@ function decrypt() {
     const decryptedChars = decryptedNums.map(num => numToChar[num] || '?');
 
     // 結果を表示
-    let html = '<div class="result-card">';
+    let html = '<div class="result-card scale-in">';
     html += '<div class="result-header">';
     html += '<div class="result-title"><i class="fas fa-unlock"></i> 復号結果</div>';
     html += '</div>';
@@ -455,8 +463,311 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// 鍵のエクスポート/インポート機能
+function exportPublicKey(n, e) {
+    const keyData = {
+        type: 'public',
+        n: n,
+        e: e,
+        timestamp: new Date().toISOString()
+    };
+    downloadJSON(keyData, `public_key_${Date.now()}.json`);
+    showToast('公開鍵をエクスポートしました', 'success');
+}
+
+function exportPrivateKey(n, d) {
+    const keyData = {
+        type: 'private',
+        n: n,
+        d: d,
+        timestamp: new Date().toISOString()
+    };
+    downloadJSON(keyData, `private_key_${Date.now()}.json`);
+    showToast('秘密鍵をエクスポートしました', 'success');
+}
+
+function downloadJSON(data, filename) {
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function importPublicKeyForEncrypt() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const keyData = JSON.parse(event.target.result);
+                    if (keyData.type === 'public') {
+                        document.getElementById('encrypt-n').value = keyData.n;
+                        document.getElementById('encrypt-e').value = keyData.e;
+                        showToast('公開鍵をインポートしました', 'success');
+                    } else {
+                        showToast('公開鍵ファイルを選択してください', 'error');
+                    }
+                } catch (err) {
+                    showToast('ファイルの読み込みに失敗しました', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+    };
+    input.click();
+}
+
+function importPrivateKeyForDecrypt() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const keyData = JSON.parse(event.target.result);
+                    if (keyData.type === 'private') {
+                        document.getElementById('decrypt-n').value = keyData.n;
+                        document.getElementById('decrypt-d').value = keyData.d;
+                        showToast('秘密鍵をインポートしました', 'success');
+                    } else {
+                        showToast('秘密鍵ファイルを選択してください', 'error');
+                    }
+                } catch (err) {
+                    showToast('ファイルの読み込みに失敗しました', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+    };
+    input.click();
+}
+
+// サンプルデータ読み込み
+function loadSampleKey() {
+    document.getElementById('prime-p').value = '61';
+    document.getElementById('prime-q').value = '53';
+    updateKeyGen();
+    showToast('サンプルデータを読み込みました', 'success');
+}
+
+function loadSamplePlaintext() {
+    document.getElementById('plaintext').value = 'こんにちは';
+    document.getElementById('encrypt-n').value = '3233';
+    document.getElementById('encrypt-e').value = '17';
+    processPlaintext();
+    showToast('サンプルデータを読み込みました', 'success');
+}
+
+function loadSampleDecrypt() {
+    document.getElementById('decrypt-n').value = '3233';
+    document.getElementById('decrypt-d').value = '2753';
+    document.getElementById('ciphertext').value = '2790 871 2511 2511 668 1793 913';
+    showToast('サンプルデータを読み込みました', 'success');
+}
+
+// トースト通知
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+
+    const iconMap = {
+        'success': 'fa-check-circle',
+        'error': 'fa-exclamation-circle',
+        'info': 'fa-info-circle',
+        'warning': 'fa-exclamation-triangle'
+    };
+
+    const colorMap = {
+        'success': 'var(--success-color)',
+        'error': 'var(--danger-color)',
+        'info': 'var(--info-color)',
+        'warning': 'var(--warning-color)'
+    };
+
+    toast.innerHTML = `<i class="fas ${iconMap[type]}"></i> ${message}`;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: ${colorMap[type]};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 600;
+        z-index: 9999;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// キーボードショートカットの設定
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + D でダークモード切り替え
+        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+            e.preventDefault();
+            toggleTheme();
+        }
+
+        // Alt + 1-4 でタブ切り替え
+        if (e.altKey && ['1', '2', '3', '4'].includes(e.key)) {
+            e.preventDefault();
+            const tabIndex = parseInt(e.key) - 1;
+            const tabs = ['home-tab', 'keygen-tab', 'encrypt-tab', 'decrypt-tab'];
+            document.getElementById(tabs[tabIndex]).click();
+            showToast(`${['ホーム', '鍵生成', '暗号化', '復号'][tabIndex]}タブに切り替えました`, 'info');
+        }
+
+        // Ctrl/Cmd + Enter で実行ボタン
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            const activeTab = document.querySelector('.tab-pane.active');
+            if (activeTab.id === 'encrypt') {
+                encrypt();
+            } else if (activeTab.id === 'decrypt') {
+                decrypt();
+            }
+        }
+    });
+}
+
+// ダークモード切り替え
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    const icon = document.querySelector('#theme-toggle i');
+
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+
+    // アイコンを変更
+    if (newTheme === 'dark') {
+        icon.className = 'fas fa-sun';
+    } else {
+        icon.className = 'fas fa-moon';
+    }
+}
+
+// 保存されたテーマを読み込む
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    const html = document.documentElement;
+    const icon = document.querySelector('#theme-toggle i');
+
+    html.setAttribute('data-theme', savedTheme);
+
+    if (savedTheme === 'dark') {
+        icon.className = 'fas fa-sun';
+    } else {
+        icon.className = 'fas fa-moon';
+    }
+}
+
+// リアルタイムバリデーション
+function setupInputValidation() {
+    // 平文入力のバリデーション
+    const plaintextInput = document.getElementById('plaintext');
+    plaintextInput.addEventListener('input', (e) => {
+        const value = e.target.value;
+        let isValid = true;
+        let message = '';
+
+        if (value.length === 0) {
+            isValid = true;
+            message = '';
+        } else {
+            // 全角ひらがな、全角英数字・記号をチェック
+            for (let ch of value) {
+                if (charToNum[ch] === undefined && !dakutenMap[ch]) {
+                    isValid = false;
+                    message = `「${ch}」はサポートされていない文字です`;
+                    break;
+                }
+            }
+            if (isValid) {
+                message = `${value.length}文字入力済み`;
+            }
+        }
+
+        // 入力フィールドのスタイルを更新
+        if (value.length > 0) {
+            if (isValid) {
+                plaintextInput.style.borderColor = 'var(--success-color)';
+            } else {
+                plaintextInput.style.borderColor = 'var(--danger-color)';
+            }
+        } else {
+            plaintextInput.style.borderColor = 'var(--border-color)';
+        }
+    });
+
+    // 数値入力のバリデーション
+    const numberInputs = ['encrypt-n', 'encrypt-e', 'decrypt-n', 'decrypt-d'];
+    numberInputs.forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            if (value < 1 || isNaN(value)) {
+                input.style.borderColor = 'var(--danger-color)';
+            } else {
+                input.style.borderColor = 'var(--success-color)';
+            }
+        });
+    });
+}
+
+// ツールチップの初期化
+function initTooltips() {
+    const tooltips = [
+        { selector: '#prime-p', text: 'RSA暗号の基礎となる素数。大きいほど安全性が高まります。' },
+        { selector: '#prime-q', text: 'もう一つの素数。pとは異なる値を選んでください。' },
+        { selector: '#plaintext', text: 'ポケベル暗号でサポートされている文字を入力してください。' },
+        { selector: '#encrypt-n', text: '公開鍵の一部。n = p × q で計算されます。' },
+        { selector: '#encrypt-e', text: '公開鍵の一部。zと互いに素である必要があります。' },
+        { selector: '#decrypt-n', text: '暗号化時に使用したnの値を入力してください。' },
+        { selector: '#decrypt-d', text: '秘密鍵。この値は絶対に秘密にしてください。' }
+    ];
+
+    tooltips.forEach(({ selector, text }) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.setAttribute('title', text);
+            element.setAttribute('data-tooltip', text);
+        }
+    });
+}
+
 // イベントリスナーの設定
 document.addEventListener('DOMContentLoaded', () => {
+    // テーマの読み込み
+    loadTheme();
+
+    // テーマ切り替えボタン
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
     // 鍵生成タブ
     document.getElementById('prime-p').addEventListener('change', updateKeyGen);
     document.getElementById('prime-q').addEventListener('change', updateKeyGen);
@@ -470,4 +781,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 初期状態で鍵生成を更新
     updateKeyGen();
+
+    // キーボードショートカットの設定
+    setupKeyboardShortcuts();
+
+    // 入力検証の設定
+    setupInputValidation();
+
+    // ツールチップの初期化
+    initTooltips();
 });
