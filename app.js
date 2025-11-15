@@ -55,31 +55,35 @@ function updateKeyGen() {
     const resultDiv = document.getElementById('keygen-result');
 
     if (p === q) {
-        resultDiv.innerHTML = '<div class="alert alert-danger">【エラー】 p と q が同じ数字のため、鍵生成を実行できません。pとqは別々の数字にしてください。</div>';
+        resultDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <div><strong>エラー</strong><br>p と q が同じ数字のため、鍵生成を実行できません。pとqは別々の数字にしてください。</div></div>';
         return;
     }
 
     if (p * q < 143) {
-        resultDiv.innerHTML = '<div class="alert alert-warning">【エラー】 p と q が小さい or 近すぎるため、鍵生成を実行できません。<br>【エラー】 p × q ≥ 143 になるような数字にしてください。</div>';
+        resultDiv.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> <div><strong>エラー</strong><br>p と q が小さすぎます。p × q ≥ 143 になるような数字にしてください。</div></div>';
         return;
     }
 
     const n = p * q;
     const z = (p - 1) * (q - 1);
 
-    let html = '<div class="alert alert-success">条件を満たしています。次のステップに進みます。</div>';
-    html += `<p>③　n = p × q を求めます。 p ( ${p} ) × q ( ${q} ) のため、 n は ${n} になります。</p>`;
-    html += `<p>④　z = ( p - 1 ) × ( q - 1 ) を求めます。 p - 1 = ${p - 1}、 q - 1 = ${q - 1} のため、z は ${z} になります。</p>`;
+    let html = '<div class="content-card">';
+    html += '<div class="alert alert-success"><i class="fas fa-check-circle"></i> <div>条件を満たしています。次のステップに進みます。</div></div>';
+    html += '<div class="step-explanation">';
+    html += `<div class="calc-step"><i class="fas fa-calculator"></i> <strong>ステップ 3:</strong> n = p × q = ${p} × ${q} = <span class="highlight">${n}</span></div>`;
+    html += `<div class="calc-step"><i class="fas fa-calculator"></i> <strong>ステップ 4:</strong> z = (p-1) × (q-1) = ${p-1} × ${q-1} = <span class="highlight">${z}</span></div>`;
+    html += '</div>';
 
     // e の選択肢を表示
     const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
-    html += '<p>⑤　z を割ることのできない素数( e )を選んでください。</p>';
-    html += '<select id="prime-e" class="form-select mb-3">';
+    html += '<div class="mt-3"><label class="form-label"><i class="fas fa-3"></i> 素数 e を選択</label>';
+    html += '<select id="prime-e" class="form-select modern-select">';
     primes.forEach(prime => {
         html += `<option value="${prime}">${prime}</option>`;
     });
-    html += '</select>';
-    html += '<div id="e-result"></div>';
+    html += '</select></div>';
+    html += '<div id="e-result" class="mt-3"></div>';
+    html += '</div>';
 
     resultDiv.innerHTML = html;
 
@@ -100,23 +104,25 @@ function updateESelection() {
     const eResultDiv = document.getElementById('e-result');
 
     if (z % e === 0) {
-        eResultDiv.innerHTML = `<div class="alert alert-danger">e ( ${e} ) は z ( ${z} ) を割ることができます。<br>z ( ${z} ) ÷ e ( ${e} ) = ${Math.floor(z / e)}</div>`;
+        eResultDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle"></i> <div><strong>エラー</strong><br>e ( ${e} ) は z ( ${z} ) を割ることができます。<br>z ÷ e = ${Math.floor(z / e)}</div></div>`;
         return;
     }
 
-    let html = '<div class="alert alert-success">条件を満たしています。次のステップに進みます。</div>';
-    html += '<p>⑥　m ( p - 1 )( q - 1 )  ≡ 1 （ mod e ）となる数（ m ）を求める（1≦m≦e-1）</p>';
-    html += `<p>z ( ${z} ) × m と -1 を e ( ${e} ) で割って、余りが等しくなる数 ( m ) を求めます。</p>`;
-    html += `<p>ただし、m は 1 以上、e - 1 ( ${e - 1} ) 以下でないといけません。 ( 1 ≦ m ≦ ${e - 1} )</p>`;
-    html += '<p>つまり、「zm を e で割った余り」と「-1 を e で割った余り」が等しくなるような m を探してください</p>';
+    let html = '<div class="content-card">';
+    html += '<div class="alert alert-success"><i class="fas fa-check-circle"></i> <div>e の条件を満たしています。</div></div>';
+    html += '<div class="step-explanation">';
+    html += `<p><i class="fas fa-info-circle"></i> <strong>ステップ 5:</strong> m を求めます</p>`;
+    html += `<p>z ( ${z} ) × m と -1 を e ( ${e} ) で割って、余りが等しくなる数 m を求めます。</p>`;
 
     const targetRemainder = ((-1 % e) + e) % e;
-    html += `<p>-1 を e ( ${e} ) で割った余りは ${targetRemainder} です。</p>`;
-    html += `<p>→ ${z} × m を e ( ${e} ) で割った余りが ${targetRemainder} になるような m を探してください。</p>`;
+    html += `<div class="calc-step"><i class="fas fa-arrow-right"></i> -1 ÷ e ( ${e} ) の余り = <span class="highlight">${targetRemainder}</span></div>`;
+    html += `<div class="calc-step"><i class="fas fa-arrow-right"></i> ${z} × m ÷ ${e} の余りが ${targetRemainder} になる m を探します</div>`;
+    html += '</div>';
 
-    html += `<label class="form-label">m を選択してください（1 ≦ m ≦ ${e - 1}）</label>`;
-    html += `<input type="number" id="m-value" class="form-control mb-3" min="1" max="${e - 1}" value="1">`;
-    html += '<div id="m-result"></div>';
+    html += `<label class="form-label mt-3"><i class="fas fa-hashtag"></i> m の値を入力（1 ≦ m ≦ ${e - 1}）</label>`;
+    html += `<input type="number" id="m-value" class="form-control modern-input" min="1" max="${e - 1}" value="1">`;
+    html += '<div id="m-result" class="mt-3"></div>';
+    html += '</div>';
 
     eResultDiv.innerHTML = html;
 
@@ -141,19 +147,37 @@ function updateMSelection() {
     const actualRemainder = (z * m) % e;
 
     if (targetRemainder !== actualRemainder) {
-        mResultDiv.innerHTML = '<div class="alert alert-danger">【エラー】「zm を e で割った余り」と「-1 を e で割った余り」が等しくありません</div>';
+        mResultDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle"></i> <div><strong>エラー</strong><br>zm ÷ e の余りが一致しません（現在: ${actualRemainder}、必要: ${targetRemainder}）</div></div>`;
         return;
     }
 
     const d = Math.floor((m * z + 1) / e);
 
-    let html = '<div class="alert alert-success">条件を満たしています。</div>';
-    html += `<p>⑦　m ( ${m} ) × ( p - 1 )( q - 1 ) + 1 を e ( ${e} ) で割った商（ d ）を求めます。d は ${d} です。</p>`;
-    html += '<p>公開鍵（n,e）と秘密鍵（p,q,d）の生成が完了しました。</p>';
-    html += '<h5>公開鍵（相手に教える値）</h5>';
-    html += `<h3>n = ${n}、e = ${e}</h3>`;
-    html += '<h5>秘密鍵（教えてはいけない値）</h5>';
-    html += `<h3>p = ${p}、q = ${q}、d = ${d}</h3>`;
+    let html = '<div class="result-card">';
+    html += '<div class="alert alert-success"><i class="fas fa-check-circle"></i> <div>m の条件を満たしています！</div></div>';
+    html += '<div class="step-explanation">';
+    html += `<div class="calc-step"><i class="fas fa-calculator"></i> <strong>ステップ 6:</strong> d = (m × z + 1) ÷ e = (${m} × ${z} + 1) ÷ ${e} = <span class="highlight">${d}</span></div>`;
+    html += '</div>';
+
+    html += '<div class="mt-4"><h5 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-check-double"></i> 鍵生成完了</h5>';
+
+    html += '<div class="key-display">';
+    html += '<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">';
+    html += '<i class="fas fa-key" style="font-size: 2rem; color: var(--primary-color);"></i>';
+    html += '<div><h6 style="margin: 0; color: var(--text-secondary);">公開鍵（相手に教える値）</h6></div>';
+    html += '</div>';
+    html += `<h3>n = ${n}, e = ${e}</h3>`;
+    html += '</div>';
+
+    html += '<div class="key-display secret-key">';
+    html += '<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">';
+    html += '<i class="fas fa-lock" style="font-size: 2rem; color: var(--danger-color);"></i>';
+    html += '<div><h6 style="margin: 0; color: var(--text-secondary);">秘密鍵（絶対に秘密にする値）</h6></div>';
+    html += '</div>';
+    html += `<h3>p = ${p}, q = ${q}, d = ${d}</h3>`;
+    html += '</div>';
+
+    html += '</div></div>';
 
     mResultDiv.innerHTML = html;
 }
@@ -164,7 +188,7 @@ function processPlaintext() {
     const resultDiv = document.getElementById('plaintext-result');
 
     if (!plaintext) {
-        resultDiv.innerHTML = '<div class="alert alert-danger">【エラー】暗号化したい文字列を入力してください。</div>';
+        resultDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <div>暗号化したい文字列を入力してください。</div></div>';
         return;
     }
 
@@ -190,12 +214,13 @@ function processPlaintext() {
     }
 
     if (unknownChars) {
-        resultDiv.innerHTML = '<div class="alert alert-warning">【エラー】リストにない文字、または分解できない文字が含まれています。</div>';
+        resultDiv.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> <div>リストにない文字、または分解できない文字が含まれています。</div></div>';
         return;
     }
 
     // テーブルを作成
-    let html = '<p>入力文字の分解・数値化結果:</p>';
+    let html = '<div class="content-card">';
+    html += '<div class="card-header-custom"><i class="fas fa-list"></i><span>文字の分解・数値化結果</span></div>';
     html += '<table class="table table-bordered"><thead><tr><th>文字</th><th>数値</th></tr></thead><tbody>';
     expandedList.forEach(item => {
         html += `<tr><td>${item.文字}</td><td>${item.数値}</td></tr>`;
@@ -203,7 +228,8 @@ function processPlaintext() {
     html += '</tbody></table>';
 
     const numsList = expandedList.map(item => item.数値).join(' ');
-    html += `<p>上記の数値リスト: ${numsList}</p>`;
+    html += `<div class="info-note"><i class="fas fa-lightbulb"></i><span>数値リスト: ${numsList}</span></div>`;
+    html += '</div>';
 
     resultDiv.innerHTML = html;
 
@@ -219,7 +245,7 @@ function encrypt() {
     const resultDiv = document.getElementById('encrypted-result');
 
     if (!plaintext) {
-        resultDiv.innerHTML = '<div class="alert alert-danger">【エラー】暗号化したい文字列を入力してください。</div>';
+        resultDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <div>暗号化したい文字列を入力してください。</div></div>';
         return;
     }
 
@@ -245,7 +271,7 @@ function encrypt() {
     }
 
     if (unknownChars) {
-        resultDiv.innerHTML = '<div class="alert alert-warning">【エラー】リストにない文字、または分解できない文字が含まれています。</div>';
+        resultDiv.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> <div>リストにない文字、または分解できない文字が含まれています。</div></div>';
         return;
     }
 
@@ -254,8 +280,12 @@ function encrypt() {
         return modPow(BigInt(item.数値), e, n).toString();
     });
 
-    // テーブルを作成
-    let html = '<h5>暗号化された数値:</h5>';
+    // 結果を表示
+    let html = '<div class="result-card">';
+    html += '<div class="result-header">';
+    html += '<div class="result-title"><i class="fas fa-lock"></i> 暗号化結果</div>';
+    html += '</div>';
+
     html += '<table class="table table-bordered"><thead><tr>';
     encryptedNums.forEach((_, i) => {
         html += `<th>文字${i + 1}</th>`;
@@ -266,8 +296,18 @@ function encrypt() {
     });
     html += '</tr></tbody></table>';
 
-    html += `<p>暗号化された数値（スペース区切り）: ${encryptedNums.join(' ')}</p>`;
-    html += '<button class="btn btn-secondary" onclick="copyToClipboard(\'' + encryptedNums.join(' ') + '\')">クリップボードにコピー</button>';
+    const encryptedText = encryptedNums.join(' ');
+    html += '<div class="key-display" style="margin-top: 2rem;">';
+    html += '<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">';
+    html += '<div style="display: flex; align-items: center; gap: 1rem;">';
+    html += '<i class="fas fa-copy" style="font-size: 1.5rem; color: var(--primary-color);"></i>';
+    html += '<h6 style="margin: 0;">暗号文（コピーして相手に送信）</h6>';
+    html += '</div>';
+    html += `<button class="btn-modern btn-secondary" onclick="copyToClipboard('${encryptedText}')"><i class="fas fa-clipboard"></i> コピー</button>`;
+    html += '</div>';
+    html += `<p style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin: 0; word-break: break-all;">${encryptedText}</p>`;
+    html += '</div>';
+    html += '</div>';
 
     resultDiv.innerHTML = html;
 }
@@ -282,7 +322,7 @@ function decrypt() {
     const encryptedList = ciphertext.trim().split(/\s+/).filter(num => /^\d+$/.test(num));
 
     if (encryptedList.length === 0) {
-        resultDiv.innerHTML = '<div class="alert alert-danger">【エラー】暗号化された数値を入力してください。</div>';
+        resultDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <div>暗号化された数値を入力してください。</div></div>';
         return;
     }
 
@@ -294,8 +334,12 @@ function decrypt() {
     // 数値を文字に変換
     const decryptedChars = decryptedNums.map(num => numToChar[num] || '?');
 
-    // テーブルを作成
-    let html = '<h5>復号された文字:</h5>';
+    // 結果を表示
+    let html = '<div class="result-card">';
+    html += '<div class="result-header">';
+    html += '<div class="result-title"><i class="fas fa-unlock"></i> 復号結果</div>';
+    html += '</div>';
+
     html += '<table class="table table-bordered"><thead><tr>';
     decryptedChars.forEach((_, i) => {
         html += `<th>文字${i + 1}</th>`;
@@ -306,7 +350,15 @@ function decrypt() {
     });
     html += '</tr></tbody></table>';
 
-    html += `<p>復号された文字列: ${decryptedChars.join('')}</p>`;
+    const decryptedText = decryptedChars.join('');
+    html += '<div class="key-display" style="margin-top: 2rem; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-left-color: var(--success-color);">';
+    html += '<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">';
+    html += '<i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success-color);"></i>';
+    html += '<h6 style="margin: 0;">復号されたメッセージ</h6>';
+    html += '</div>';
+    html += `<h3 style="color: var(--success-color); font-size: 2.5rem;">${decryptedText}</h3>`;
+    html += '</div>';
+    html += '</div>';
 
     resultDiv.innerHTML = html;
 }
@@ -314,11 +366,94 @@ function decrypt() {
 // クリップボードにコピー
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-        alert('クリップボードにコピーしました');
+        // 成功メッセージを表示
+        const toast = document.createElement('div');
+        toast.className = 'copy-toast';
+        toast.innerHTML = '<i class="fas fa-check-circle"></i> クリップボードにコピーしました';
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--success-color), #34d399);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease-out;
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease-out';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
     }).catch(err => {
         console.error('コピーに失敗しました:', err);
+        alert('コピーに失敗しました');
     });
 }
+
+// アニメーション用CSS（動的に追加）
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideOutRight {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+    }
+
+    .step-explanation {
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+    }
+
+    .calc-step {
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        margin: 0.75rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .calc-step i {
+        color: var(--primary-color);
+        font-size: 1.25rem;
+    }
+
+    .calc-step .highlight {
+        color: var(--primary-color);
+        font-weight: 700;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.1rem;
+    }
+`;
+document.head.appendChild(style);
 
 // イベントリスナーの設定
 document.addEventListener('DOMContentLoaded', () => {

@@ -3,205 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSA暗号体験</title>
+    <title>RSA暗号体験 - 公開鍵暗号を学ぼう</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container mt-4">
-        <ul class="nav nav-tabs" id="mainTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button">トップページ</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="keygen-tab" data-bs-toggle="tab" data-bs-target="#keygen" type="button">鍵生成</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="encrypt-tab" data-bs-toggle="tab" data-bs-target="#encrypt" type="button">暗号化</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="decrypt-tab" data-bs-toggle="tab" data-bs-target="#decrypt" type="button">復号</button>
-            </li>
-        </ul>
+    <!-- Header -->
+    <header class="header-gradient">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-lock icon-3d"></i>
+                    <div>
+                        <h1 class="header-title">RSA暗号体験</h1>
+                        <p class="header-subtitle">公開鍵暗号の世界へようこそ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-        <div class="tab-content mt-4" id="mainTabContent">
+    <div class="container main-container">
+        <nav class="modern-tabs">
+            <ul class="nav nav-pills" id="mainTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button">
+                        <i class="fas fa-home"></i>
+                        <span>ホーム</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="keygen-tab" data-bs-toggle="tab" data-bs-target="#keygen" type="button">
+                        <i class="fas fa-key"></i>
+                        <span>鍵生成</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="encrypt-tab" data-bs-toggle="tab" data-bs-target="#encrypt" type="button">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>暗号化</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="decrypt-tab" data-bs-toggle="tab" data-bs-target="#decrypt" type="button">
+                        <i class="fas fa-unlock-alt"></i>
+                        <span>復号</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="tab-content" id="mainTabContent">
             <!-- トップページ -->
             <div class="tab-pane fade show active" id="home" role="tabpanel">
-                <h1>RSA暗号体験</h1>
-                <p class="text-muted">Created by Dit-Lab.(Daiki Ito)</p>
-
-                <h4 class="mt-4">ブラウザでRSA暗号の「鍵生成」→「暗号化」→「復号」まで体験することができます</h4>
-
-                <h5 class="mt-4">RSA暗号とは</h5>
-                <p>RSA暗号…公開鍵暗号方式で使われる代表的な暗号アルゴリズム</p>
-                <p>　→　コンピュータで素因数分解しようとしても、大きな数であれば膨大な時間がかかる仕組みを利用した暗号</p>
-
-                <h5 class="mt-4">RSA暗号体験Webアプリケーションの使い方</h5>
-                <p>①　ペアで「受信者」「送信者」の役割を決める</p>
-                <p>②　受信者は「鍵生成」ページで「秘密鍵（開ける鍵）」 「公開鍵（閉める鍵）」を作成</p>
-                <p>③　受信者は「公開鍵（閉める鍵）」を送信者に渡す</p>
-                <p>④　送信者は、「暗号化」ページで暗号化したい文字（ねむい 等）を決める（平文）</p>
-                <p>※便宜上 ポケベル暗号を使用します (本来は文字コードで行います)</p>
-
-                <div class="my-4">
-                    <img src="ポケベル暗号.png" alt="ポケベル暗号" class="img-fluid">
+                <div class="welcome-hero">
+                    <div class="hero-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2 class="hero-title">RSA暗号の仕組みを体験しよう</h2>
+                    <p class="hero-subtitle">ブラウザ上で「鍵生成」→「暗号化」→「復号」のプロセスを学べる教育ツール</p>
                 </div>
 
-                <p>⑤　送信者は、平文を公開鍵を使って暗号化する</p>
-                <p>⑥　送信者は、暗号化した文字を受信者に渡す</p>
-                <p>⑦　受信者は、「復号」ページで受け取った暗号文を、秘密鍵を使って復号する</p>
+                <div class="info-cards">
+                    <div class="info-card card-animate">
+                        <div class="info-card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h5>RSA暗号とは</h5>
+                        <p>公開鍵暗号方式で使われる代表的な暗号アルゴリズム。大きな数の素因数分解が計算量的に困難である性質を利用しています。</p>
+                    </div>
 
-                <p class="mt-4">ご意見・ご要望は→ <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">https://forms.gle/G5sMYm7dNpz2FQtU9</a> まで</p>
-                <p class="text-muted">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <h6>1. 鍵生成</h6>
+                            <p>素数を選択して公開鍵と秘密鍵のペアを生成</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h6>2. 暗号化</h6>
+                            <p>公開鍵を使ってメッセージを暗号化</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-unlock"></i>
+                            </div>
+                            <h6>3. 復号</h6>
+                            <p>秘密鍵を使って暗号文を元に戻す</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card usage-card">
+                    <h5><i class="fas fa-book-open"></i> 使い方</h5>
+                    <div class="steps-container">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>役割を決める</strong>
+                                <p>ペアで「受信者」と「送信者」の役割を決めましょう</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>鍵を生成</strong>
+                                <p>受信者は「鍵生成」で公開鍵と秘密鍵を作成し、公開鍵を送信者に渡します</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>暗号化</strong>
+                                <p>送信者は「暗号化」で平文を公開鍵で暗号化し、受信者に渡します</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>復号</strong>
+                                <p>受信者は「復号」で暗号文を秘密鍵で復号します</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-note">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>便宜上、文字の数値化にポケベル暗号を使用しています（本来は文字コードを使用）</span>
+                    </div>
+                </div>
+
+                <div class="pocketbell-section">
+                    <h5><i class="fas fa-table"></i> ポケベル暗号表</h5>
+                    <div class="image-container">
+                        <img src="ポケベル暗号.png" alt="ポケベル暗号" class="img-fluid rounded">
+                    </div>
+                </div>
+
+                <footer class="page-footer">
+                    <p><i class="fas fa-envelope"></i> ご意見・ご要望は <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">こちら</a></p>
+                    <p class="copyright">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                </footer>
             </div>
 
             <!-- 鍵生成 -->
             <div class="tab-pane fade" id="keygen" role="tabpanel">
-                <h1>RSA暗号体験（鍵生成）</h1>
-                <p class="text-muted">Created by Dit-Lab.(Daiki Ito)</p>
-
-                <h4 class="mt-4">ブラウザでRSA暗号の「鍵生成」→「暗号化」→「復号」まで体験することができます</h4>
-
-                <h5 class="mt-4">鍵生成</h5>
-
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label class="form-label">①　0~100 内の素数( p )を選択</label>
-                        <select id="prime-p" class="form-select">
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="5">5</option>
-                            <option value="7">7</option>
-                            <option value="11">11</option>
-                            <option value="13">13</option>
-                            <option value="17">17</option>
-                            <option value="19">19</option>
-                            <option value="23">23</option>
-                            <option value="29">29</option>
-                            <option value="31">31</option>
-                            <option value="37">37</option>
-                            <option value="41">41</option>
-                            <option value="43">43</option>
-                            <option value="47">47</option>
-                            <option value="53">53</option>
-                            <option value="59">59</option>
-                            <option value="61">61</option>
-                            <option value="67">67</option>
-                            <option value="71">71</option>
-                            <option value="73">73</option>
-                            <option value="79">79</option>
-                            <option value="83">83</option>
-                            <option value="89">89</option>
-                            <option value="97">97</option>
-                        </select>
+                <div class="page-header">
+                    <div class="page-icon">
+                        <i class="fas fa-key"></i>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">②　0~100 内の素数( q )を選択</label>
-                        <select id="prime-q" class="form-select">
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="5">5</option>
-                            <option value="7">7</option>
-                            <option value="11">11</option>
-                            <option value="13">13</option>
-                            <option value="17">17</option>
-                            <option value="19">19</option>
-                            <option value="23">23</option>
-                            <option value="29">29</option>
-                            <option value="31">31</option>
-                            <option value="37">37</option>
-                            <option value="41">41</option>
-                            <option value="43">43</option>
-                            <option value="47">47</option>
-                            <option value="53">53</option>
-                            <option value="59">59</option>
-                            <option value="61">61</option>
-                            <option value="67">67</option>
-                            <option value="71">71</option>
-                            <option value="73">73</option>
-                            <option value="79">79</option>
-                            <option value="83">83</option>
-                            <option value="89">89</option>
-                            <option value="97">97</option>
-                        </select>
+                    <div>
+                        <h2>鍵生成</h2>
+                        <p>公開鍵と秘密鍵のペアを生成します</p>
                     </div>
                 </div>
 
-                <div id="keygen-result" class="mt-4"></div>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <i class="fas fa-cog"></i>
+                        <span>素数の選択</span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-1"></i> 素数 p を選択</label>
+                            <select id="prime-p" class="form-select modern-select">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="5">5</option>
+                            <option value="7">7</option>
+                            <option value="11">11</option>
+                            <option value="13">13</option>
+                            <option value="17">17</option>
+                            <option value="19">19</option>
+                            <option value="23">23</option>
+                            <option value="29">29</option>
+                            <option value="31">31</option>
+                            <option value="37">37</option>
+                            <option value="41">41</option>
+                            <option value="43">43</option>
+                            <option value="47">47</option>
+                            <option value="53">53</option>
+                            <option value="59">59</option>
+                            <option value="61">61</option>
+                            <option value="67">67</option>
+                            <option value="71">71</option>
+                            <option value="73">73</option>
+                            <option value="79">79</option>
+                            <option value="83">83</option>
+                            <option value="89">89</option>
+                            <option value="97">97</option>
+                        </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-2"></i> 素数 q を選択</label>
+                            <select id="prime-q" class="form-select modern-select">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="5">5</option>
+                            <option value="7">7</option>
+                            <option value="11">11</option>
+                            <option value="13">13</option>
+                            <option value="17">17</option>
+                            <option value="19">19</option>
+                            <option value="23">23</option>
+                            <option value="29">29</option>
+                            <option value="31">31</option>
+                            <option value="37">37</option>
+                            <option value="41">41</option>
+                            <option value="43">43</option>
+                            <option value="47">47</option>
+                            <option value="53">53</option>
+                            <option value="59">59</option>
+                            <option value="61">61</option>
+                            <option value="67">67</option>
+                            <option value="71">71</option>
+                            <option value="73">73</option>
+                            <option value="79">79</option>
+                            <option value="83">83</option>
+                            <option value="89">89</option>
+                            <option value="97">97</option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
 
-                <p class="mt-4">ご意見・ご要望は→ <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">https://forms.gle/G5sMYm7dNpz2FQtU9</a> まで</p>
-                <p class="text-muted">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                <div id="keygen-result"></div>
+
+                <footer class="page-footer">
+                    <p><i class="fas fa-envelope"></i> ご意見・ご要望は <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">こちら</a></p>
+                    <p class="copyright">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                </footer>
             </div>
 
             <!-- 暗号化 -->
             <div class="tab-pane fade" id="encrypt" role="tabpanel">
-                <h1>RSA暗号体験（暗号化）</h1>
-                <p class="text-muted">Created by Dit-Lab.(Daiki Ito)</p>
-
-                <h4 class="mt-4">ブラウザでRSA暗号の「鍵生成」→「暗号化」→「復号」まで体験することができます</h4>
-                <p>暗号化には便宜上ポケベル暗号を使っています（本来は文字コード）</p>
-
-                <div class="my-4">
-                    <img src="ポケベル暗号.png" alt="ポケベル暗号" class="img-fluid">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">暗号化したい文字列を入力</label>
-                    <input type="text" id="plaintext" class="form-control" placeholder="全角ひらがなや全角英数字・記号で入力してください">
-                    <small class="text-muted">※ 「全角ひらがな」や「全角英数字・記号」で入力してください</small>
-                </div>
-
-                <div id="plaintext-result" class="mt-3"></div>
-
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label class="form-label">公開鍵( n )を入力してください</label>
-                        <input type="number" id="encrypt-n" class="form-control" min="1" value="1">
+                <div class="page-header">
+                    <div class="page-icon">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">公開鍵( e )を入力してください</label>
-                        <input type="number" id="encrypt-e" class="form-control" min="1" value="1">
+                    <div>
+                        <h2>暗号化</h2>
+                        <p>公開鍵を使ってメッセージを暗号化します</p>
                     </div>
                 </div>
 
-                <button id="encrypt-btn" class="btn btn-primary mt-3">暗号化実行</button>
+                <div class="pocketbell-reference">
+                    <button class="btn-reference" type="button" data-bs-toggle="collapse" data-bs-target="#pocketbellCollapse">
+                        <i class="fas fa-table"></i> ポケベル暗号表を表示
+                    </button>
+                    <div class="collapse" id="pocketbellCollapse">
+                        <div class="reference-content">
+                            <img src="ポケベル暗号.png" alt="ポケベル暗号" class="img-fluid rounded">
+                        </div>
+                    </div>
+                </div>
 
-                <div id="encrypted-result" class="mt-4"></div>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <i class="fas fa-pen"></i>
+                        <span>平文の入力</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">暗号化したい文字列</label>
+                        <input type="text" id="plaintext" class="form-control modern-input" placeholder="例: ねむい">
+                        <small class="form-text"><i class="fas fa-info-circle"></i> 全角ひらがな、全角英数字・記号で入力してください</small>
+                    </div>
+                    <div id="plaintext-result"></div>
+                </div>
 
-                <p class="mt-4">ご意見・ご要望は→ <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">https://forms.gle/G5sMYm7dNpz2FQtU9</a> まで</p>
-                <p class="text-muted">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <i class="fas fa-key"></i>
+                        <span>公開鍵の入力</span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">公開鍵 n</label>
+                            <input type="number" id="encrypt-n" class="form-control modern-input" min="1" value="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">公開鍵 e</label>
+                            <input type="number" id="encrypt-e" class="form-control modern-input" min="1" value="1">
+                        </div>
+                    </div>
+                    <button id="encrypt-btn" class="btn-modern btn-primary mt-3">
+                        <i class="fas fa-lock"></i> 暗号化実行
+                    </button>
+                </div>
+
+                <div id="encrypted-result"></div>
+
+                <footer class="page-footer">
+                    <p><i class="fas fa-envelope"></i> ご意見・ご要望は <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">こちら</a></p>
+                    <p class="copyright">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                </footer>
             </div>
 
             <!-- 復号 -->
             <div class="tab-pane fade" id="decrypt" role="tabpanel">
-                <h1>RSA暗号体験（復号）</h1>
-                <p class="text-muted">Created by Dit-Lab.(Daiki Ito)</p>
-
-                <h4 class="mt-4">RSA暗号の「復号」プロセスを体験することができます</h4>
-                <p>復号には、暗号化された数値と秘密鍵が必要です</p>
-
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label class="form-label">公開鍵( n )を入力してください</label>
-                        <input type="number" id="decrypt-n" class="form-control" min="1" value="1">
+                <div class="page-header">
+                    <div class="page-icon">
+                        <i class="fas fa-unlock-alt"></i>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">秘密鍵( d )を入力してください</label>
-                        <input type="number" id="decrypt-d" class="form-control" min="1" value="1">
+                    <div>
+                        <h2>復号</h2>
+                        <p>秘密鍵を使って暗号文を元のメッセージに戻します</p>
                     </div>
                 </div>
 
-                <div class="mb-3 mt-3">
-                    <label class="form-label">暗号化された数値をスペース区切りで入力してください</label>
-                    <textarea id="ciphertext" class="form-control" rows="3"></textarea>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <i class="fas fa-key"></i>
+                        <span>鍵の入力</span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">公開鍵 n</label>
+                            <input type="number" id="decrypt-n" class="form-control modern-input" min="1" value="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">秘密鍵 d</label>
+                            <input type="number" id="decrypt-d" class="form-control modern-input" min="1" value="1">
+                        </div>
+                    </div>
                 </div>
 
-                <button id="decrypt-btn" class="btn btn-primary">復号実行</button>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <i class="fas fa-file-code"></i>
+                        <span>暗号文の入力</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">暗号化された数値（スペース区切り）</label>
+                        <textarea id="ciphertext" class="form-control modern-input" rows="4" placeholder="例: 123 456 789"></textarea>
+                    </div>
+                    <button id="decrypt-btn" class="btn-modern btn-primary">
+                        <i class="fas fa-unlock"></i> 復号実行
+                    </button>
+                </div>
 
-                <div id="decrypted-result" class="mt-4"></div>
+                <div id="decrypted-result"></div>
 
-                <p class="mt-4">ご意見・ご要望は→ <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">https://forms.gle/G5sMYm7dNpz2FQtU9</a> まで</p>
-                <p class="text-muted">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                <footer class="page-footer">
+                    <p><i class="fas fa-envelope"></i> ご意見・ご要望は <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">こちら</a></p>
+                    <p class="copyright">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                </footer>
             </div>
         </div>
     </div>
