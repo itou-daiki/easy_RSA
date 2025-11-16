@@ -137,6 +137,7 @@ body {
     display: flex;
     gap: 0.25rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .modern-tabs .nav-item {
