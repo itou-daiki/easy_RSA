@@ -67,6 +67,261 @@
                 <p class="text-muted">Created by Dit-Lab.(Daiki Ito)</p>
 
                 <h4 class="mt-4">ブラウザでRSA暗号の「鍵生成」→「暗号化」→「復号」まで体験することができます</h4>
+
+                <div class="info-cards">
+                    <div class="info-card card-animate">
+                        <div class="info-card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h5>RSA暗号とは</h5>
+                        <p>公開鍵暗号方式で使われる代表的な暗号アルゴリズム。大きな数の素因数分解が計算量的に困難である性質を利用しています。</p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <h6>1. 鍵生成</h6>
+                            <p>素数を選択して公開鍵と秘密鍵のペアを生成</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h6>2. 暗号化</h6>
+                            <p>公開鍵を使ってメッセージを暗号化</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-unlock"></i>
+                            </div>
+                            <h6>3. 復号</h6>
+                            <p>秘密鍵を使って暗号文を元に戻す</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card usage-card">
+                    <h5><i class="fas fa-book-open"></i> 使い方</h5>
+                    <div class="steps-container">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>役割を決める</strong>
+                                <p>ペアで「受信者」と「送信者」の役割を決めましょう</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>鍵を生成</strong>
+                                <p>受信者は「鍵生成」で公開鍵と秘密鍵を作成し、公開鍵を送信者に渡します</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>暗号化</strong>
+                                <p>送信者は「暗号化」で平文を公開鍵で暗号化し、受信者に渡します</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>復号</strong>
+                                <p>受信者は「復号」で暗号文を秘密鍵で復号します</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-note">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>便宜上、文字の数値化にポケベル暗号を使用しています（本来は文字コードを使用）</span>
+                    </div>
+                </div>
+
+                <div class="pocketbell-section">
+                    <h5><i class="fas fa-table"></i> ポケベルコード変換表</h5>
+                    <div class="pocketbell-table-container">
+                        <table class="table table-bordered pocketbell-table pocketbell-grid">
+                            <thead>
+                                <tr>
+                                    <th class="grid-header">1桁目＼2桁目</th>
+                                    <th class="grid-header">1</th>
+                                    <th class="grid-header">2</th>
+                                    <th class="grid-header">3</th>
+                                    <th class="grid-header">4</th>
+                                    <th class="grid-header">5</th>
+                                    <th class="grid-header">6</th>
+                                    <th class="grid-header">7</th>
+                                    <th class="grid-header">8</th>
+                                    <th class="grid-header">9</th>
+                                    <th class="grid-header">0</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th class="grid-header">1</th>
+                                    <td>あ</td>
+                                    <td>い</td>
+                                    <td>う</td>
+                                    <td>え</td>
+                                    <td>お</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>D</td>
+                                    <td>E</td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">2</th>
+                                    <td>か</td>
+                                    <td>き</td>
+                                    <td>く</td>
+                                    <td>け</td>
+                                    <td>こ</td>
+                                    <td>F</td>
+                                    <td>G</td>
+                                    <td>H</td>
+                                    <td>I</td>
+                                    <td>J</td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">3</th>
+                                    <td>さ</td>
+                                    <td>し</td>
+                                    <td>す</td>
+                                    <td>せ</td>
+                                    <td>そ</td>
+                                    <td>K</td>
+                                    <td>L</td>
+                                    <td>M</td>
+                                    <td>N</td>
+                                    <td>O</td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">4</th>
+                                    <td>た</td>
+                                    <td>ち</td>
+                                    <td>つ</td>
+                                    <td>て</td>
+                                    <td>と</td>
+                                    <td>P</td>
+                                    <td>Q</td>
+                                    <td>R</td>
+                                    <td>S</td>
+                                    <td>T</td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">5</th>
+                                    <td>な</td>
+                                    <td>に</td>
+                                    <td>ぬ</td>
+                                    <td>ね</td>
+                                    <td>の</td>
+                                    <td>U</td>
+                                    <td>V</td>
+                                    <td>W</td>
+                                    <td>X</td>
+                                    <td>Y</td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">6</th>
+                                    <td>は</td>
+                                    <td>ひ</td>
+                                    <td>ふ</td>
+                                    <td>へ</td>
+                                    <td>ほ</td>
+                                    <td>Z</td>
+                                    <td>?</td>
+                                    <td>!</td>
+                                    <td>ー</td>
+                                    <td>／</td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">7</th>
+                                    <td>ま</td>
+                                    <td>み</td>
+                                    <td>む</td>
+                                    <td>め</td>
+                                    <td>も</td>
+                                    <td>¥</td>
+                                    <td>&amp;</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">8</th>
+                                    <td>や</td>
+                                    <td>(</td>
+                                    <td>ゆ</td>
+                                    <td>)</td>
+                                    <td>よ</td>
+                                    <td>*</td>
+                                    <td>#</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">9</th>
+                                    <td>ら</td>
+                                    <td>り</td>
+                                    <td>る</td>
+                                    <td>れ</td>
+                                    <td>ろ</td>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <th class="grid-header">0</th>
+                                    <td>わ</td>
+                                    <td>を</td>
+                                    <td>ん</td>
+                                    <td>゛</td>
+                                    <td>゜</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                    <td>8</td>
+                                    <td>9</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-note mt-3">
+                            <i class="fas fa-info-circle"></i>
+                            <span>使い方: 縦軸（1桁目）と横軸（2桁目）の交点が文字コードです。例: あ = 11（縦1、横1）</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card" style="border-left: 4px solid var(--info-color);">
+                    <h5><i class="fas fa-keyboard"></i> キーボードショートカット</h5>
+                    <div class="shortcuts-grid">
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>D</kbd>
+                            <span>ダークモード切り替え</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Alt</kbd> + <kbd>1~4</kbd>
+                            <span>タブ切り替え</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
+                            <span>暗号化/復号実行</span>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="page-footer">
+                    <p><i class="fas fa-envelope"></i> ご意見・ご要望は <a href="https://forms.gle/G5sMYm7dNpz2FQtU9" target="_blank">こちら</a></p>
+                    <p class="copyright">© 2022-2025 Dit-Lab.(Daiki Ito). All Rights Reserved.</p>
+                </footer>
             </div>
 
             <!-- 鍵生成 -->
@@ -181,7 +436,163 @@
                     </button>
                     <div class="collapse" id="pocketbellCollapse">
                         <div class="reference-content">
-                            <img src="ポケベル暗号.png" alt="ポケベル暗号" class="img-fluid rounded">
+                            <h5><i class="fas fa-table"></i> ポケベルコード変換表</h5>
+                            <div class="pocketbell-table-container">
+                                <table class="table table-bordered pocketbell-table pocketbell-grid">
+                                    <thead>
+                                        <tr>
+                                            <th class="grid-header">1桁目＼2桁目</th>
+                                            <th class="grid-header">1</th>
+                                            <th class="grid-header">2</th>
+                                            <th class="grid-header">3</th>
+                                            <th class="grid-header">4</th>
+                                            <th class="grid-header">5</th>
+                                            <th class="grid-header">6</th>
+                                            <th class="grid-header">7</th>
+                                            <th class="grid-header">8</th>
+                                            <th class="grid-header">9</th>
+                                            <th class="grid-header">0</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th class="grid-header">1</th>
+                                            <td>あ</td>
+                                            <td>い</td>
+                                            <td>う</td>
+                                            <td>え</td>
+                                            <td>お</td>
+                                            <td>A</td>
+                                            <td>B</td>
+                                            <td>C</td>
+                                            <td>D</td>
+                                            <td>E</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">2</th>
+                                            <td>か</td>
+                                            <td>き</td>
+                                            <td>く</td>
+                                            <td>け</td>
+                                            <td>こ</td>
+                                            <td>F</td>
+                                            <td>G</td>
+                                            <td>H</td>
+                                            <td>I</td>
+                                            <td>J</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">3</th>
+                                            <td>さ</td>
+                                            <td>し</td>
+                                            <td>す</td>
+                                            <td>せ</td>
+                                            <td>そ</td>
+                                            <td>K</td>
+                                            <td>L</td>
+                                            <td>M</td>
+                                            <td>N</td>
+                                            <td>O</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">4</th>
+                                            <td>た</td>
+                                            <td>ち</td>
+                                            <td>つ</td>
+                                            <td>て</td>
+                                            <td>と</td>
+                                            <td>P</td>
+                                            <td>Q</td>
+                                            <td>R</td>
+                                            <td>S</td>
+                                            <td>T</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">5</th>
+                                            <td>な</td>
+                                            <td>に</td>
+                                            <td>ぬ</td>
+                                            <td>ね</td>
+                                            <td>の</td>
+                                            <td>U</td>
+                                            <td>V</td>
+                                            <td>W</td>
+                                            <td>X</td>
+                                            <td>Y</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">6</th>
+                                            <td>は</td>
+                                            <td>ひ</td>
+                                            <td>ふ</td>
+                                            <td>へ</td>
+                                            <td>ほ</td>
+                                            <td>Z</td>
+                                            <td>?</td>
+                                            <td>!</td>
+                                            <td>ー</td>
+                                            <td>／</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">7</th>
+                                            <td>ま</td>
+                                            <td>み</td>
+                                            <td>む</td>
+                                            <td>め</td>
+                                            <td>も</td>
+                                            <td>¥</td>
+                                            <td>&amp;</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">8</th>
+                                            <td>や</td>
+                                            <td>(</td>
+                                            <td>ゆ</td>
+                                            <td>)</td>
+                                            <td>よ</td>
+                                            <td>*</td>
+                                            <td>#</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">9</th>
+                                            <td>ら</td>
+                                            <td>り</td>
+                                            <td>る</td>
+                                            <td>れ</td>
+                                            <td>ろ</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>3</td>
+                                            <td>4</td>
+                                            <td>5</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="grid-header">0</th>
+                                            <td>わ</td>
+                                            <td>を</td>
+                                            <td>ん</td>
+                                            <td>゛</td>
+                                            <td>゜</td>
+                                            <td>6</td>
+                                            <td>7</td>
+                                            <td>8</td>
+                                            <td>9</td>
+                                            <td>0</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="info-note mt-3">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>使い方: 縦軸（1桁目）と横軸（2桁目）の交点が文字コードです。例: あ = 11（縦1、横1）</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
